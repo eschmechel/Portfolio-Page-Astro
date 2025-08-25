@@ -1,0 +1,121 @@
+---
+// src/layouts/BlogLayout.astro
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: string;
+  tags?: string[];
+}
+
+const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props;
+const formattedPubDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+const formattedUpdatedDate = updatedDate?.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`${title} | Elliott Schmechel`} description={description}>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Blog Header -->
+    <header class="mb-12">
+      <!-- Breadcrumb -->
+      <nav class="mb-8" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-sm text-secondary-500 dark:text-secondary-400">
+          <li><a href="/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Home</a></li>
+          <li class="text-secondary-300 dark:text-secondary-600">/</li>
+          <li><a href="/blog" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Blog</a></li>
+          <li class="text-secondary-300 dark:text-secondary-600">/</li>
+          <li class="text-secondary-700 dark:text-secondary-300" aria-current="page">{title}</li>
+        </ol>
+      </nav>
+      
+      <!-- Hero Image -->
+      {heroImage && (
+        <div class="mb-8 rounded-xl overflow-hidden">
+          <img
+            src={heroImage}
+            alt={title}
+            class="w-full h-64 md:h-80 object-cover"
+            loading="eager"
+            width="800"
+            height="320"
+          />
+        </div>
+      )}
+      
+      <!-- Title and Meta -->
+      <div class="space-y-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white leading-tight">
+          {title}
+        </h1>
+        
+        <p class="text-xl text-secondary-600 dark:text-secondary-400 leading-relaxed">
+          {description}
+        </p>
+        
+        <!-- Meta Information -->
+        <div class="flex flex-wrap items-center gap-4 text-sm text-secondary-500 dark:text-secondary-400">
+          <time datetime={pubDate.toISOString()}>
+            Published on {formattedPubDate}
+          </time>
+          {updatedDate && (
+            <>
+              <span class="text-secondary-300 dark:text-secondary-600">•</span>
+              <time datetime={updatedDate.toISOString()}>
+                Updated on {formattedUpdatedDate}
+              </time>
+            </>
+          )}
+        </div>
+        
+        <!-- Tags -->
+        {tags && tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-4">
+            {tags.map(tag => (
+              <span class="inline-block px-3 py-1 text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+    
+    <!-- Blog Content -->
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+      <slot />
+    </div>
+    
+    <!-- Navigation -->
+    <footer class="mt-16 pt-8 border-t border-secondary-200 dark:border-secondary-700">
+      <div class="flex justify-between items-center">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+        >
+          ← Back to Blog
+        </a>
+        
+        <div class="flex gap-4">
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-secondary-600 dark:text-secondary-400 hover:text-secondary-800 dark:hover:text-secondary-200 transition-colors"
+            onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+          >
+            ↑ Back to top
+          </button>
+        </div>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>

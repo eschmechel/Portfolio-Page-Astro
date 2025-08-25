@@ -1,0 +1,145 @@
+---
+// src/pages/projects.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ui/ProjectCard.astro';
+import ProjectListComponent from '../../components/ui/ProjectList.astro';
+import { personalData } from '../../data/personalData';
+import { getCollection } from 'astro:content';
+import ProjectList from '../../data/projectsData';
+import Socials from '../../data/socialData';
+import { getSocialIcon } from '../../utils/socialIcons';
+import { checkMultipleSites } from '../../utils/siteStatusChecker';
+
+const pageTitle = `Projects | ${personalData.meta.siteName}`;
+const pageDescription = 'Explore my portfolio of game development, web development, and infrastructure projects.';
+
+// Try to load from content collections, fallback to legacy data
+let projects;
+try {
+  const collectionProjects = await getCollection('projects');
+  if (collectionProjects && collectionProjects.length > 0) {
+    projects = collectionProjects.map(project => project.data);
+    console.log(`[projects] Loaded ${projects.length} projects from content collection`);
+  } else {
+    projects = ProjectList;
+    console.log('[projects] Content collection empty, using legacy data');
+  }
+} catch (error) {
+  projects = ProjectList;
+  console.warn('[projects] Failed to load content collection, using legacy data:', error);
+}
+
+// Check site statuses for all website projects
+const websiteProjects = projects.filter(p => p.category === 'Website' && p.externalLink);
+const externalLinks = websiteProjects.map(p => p.externalLink).filter((link): link is string => Boolean(link));
+
+let siteStatuses: Record<string, any> = {};
+if (externalLinks.length > 0) {
+  try {
+    siteStatuses = await checkMultipleSites(externalLinks);
+    console.log(`[projects] Checked ${externalLinks.length} website statuses`);
+  } catch (error) {
+    console.warn('[projects] Failed to check site statuses:', error);
+  }
+}
+
+// Update projects with live site status
+const projectsWithLiveStatus = projects.map(project => {
+  if (project.category === 'Website' && project.externalLink && siteStatuses[project.externalLink]) {
+    return {
+      ...project,
+      liveSiteStatus: siteStatuses[project.externalLink]
+    };
+  }
+  return project;
+});
+
+const normalizedProjects = projectsWithLiveStatus;
+const featuredProjects = projectsWithLiveStatus.filter(project => project.isFeatured);
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-6">
+        My Projects
+      </h1>
+      <p class="text-xl text-secondary-600 dark:text-secondary-400 max-w-3xl mx-auto">
+        A showcase of my work in game development, web development, and infrastructure. 
+        From multiplayer games to personal homelab setups.
+      </p>
+    </div>
+    
+    <!-- Featured Projects -->
+    {featuredProjects.length > 0 && (
+      <section class="mb-20">
+        <div class="flex items-center gap-3 mb-8">
+          <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+          </svg>
+          <h2 id="featured-projects" class="text-2xl md:text-3xl font-bold text-secondary-900 dark:text-white">
+            Featured Projects
+          </h2>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredProjects.map(project => (
+            <ProjectCard
+              {...project}
+              variant="full"
+              showImage={true}
+              eager={true}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+    
+    <!-- All Projects / Project List -->
+  {normalizedProjects.length > 0 && (
+      <section>
+        <div class="flex items-center gap-3 mb-8">
+          <svg class="w-6 h-6 text-secondary-600 dark:text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+          <h2 class="text-2xl md:text-3xl font-bold text-secondary-900 dark:text-white">
+            All Projects
+          </h2>
+        </div>
+        
+  <ProjectListComponent projects={normalizedProjects} />
+      </section>
+    )}
+    
+    <!-- Call to Action -->
+    <section class="mt-20 text-center">
+      <div class="bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/20 dark:to-accent-900/20 rounded-2xl p-8 md:p-12">
+        <h2 class="text-2xl md:text-3xl font-bold text-secondary-900 dark:text-white mb-4">
+          Interested in collaborating?
+        </h2>
+        <p class="text-lg text-secondary-600 dark:text-secondary-400 mb-8 max-w-2xl mx-auto">
+          I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href={Socials.find(s => s.platform.toLowerCase() === 'email')?.url}
+            class="btn btn-contact inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold"
+          >
+            <span class="w-5 h-5" set:html={getSocialIcon('Email')} />
+            Get In Touch
+          </a>
+          <a
+            href={Socials.find(s => s.platform.toLowerCase() === 'github')?.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-secondary inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold"
+          >
+            <span class="w-5 h-5" set:html={getSocialIcon('GitHub')} />
+            View GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,119 @@
+---
+// src/pages/projects/[slug].astro
+import { getCollection, getEntry } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import ProjectList from '../../data/projectsData';
+
+export async function getStaticPaths() {
+  let projects;
+  
+  try {
+    // Try to get projects from content collections
+    const collectionProjects = await getCollection('projects');
+    if (collectionProjects && collectionProjects.length > 0) {
+      projects = collectionProjects.map(project => ({
+        slug: project.id,
+        data: project.data
+      }));
+      console.log(`[slug] Using content collection with ${projects.length} projects`);
+    } else {
+      // Fallback to legacy data - create mock entries
+      projects = ProjectList.map(project => ({
+        slug: project.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+        data: project
+      }));
+      console.log(`[slug] Using legacy data with ${projects.length} projects`);
+    }
+  } catch (error) {
+    // Fallback to legacy data
+    projects = ProjectList.map(project => ({
+      slug: project.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+      data: project
+    }));
+    console.warn('[slug] Failed to load content collection, using legacy data:', error);
+  }
+
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project: project.data }
+  }));
+}
+
+const { slug } = Astro.params;
+const { project } = Astro.props;
+
+// Try to get additional content from collection entry if available
+let projectEntry;
+try {
+  projectEntry = await getEntry('projects', slug);
+} catch (error) {
+  // Ignore error - we'll use the project data from props
+}
+
+const finalProject = projectEntry?.data || project;
+---
+
+<ProjectLayout project={finalProject}>
+  <!-- Default project content - can be customized per project -->
+  <div class="space-y-6">
+    <!-- Project Overview -->
+    <div>
+      <h2 class="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Project Overview</h2>
+      <p class="text-secondary-600 dark:text-secondary-400 leading-relaxed">
+        {finalProject.description}
+      </p>
+    </div>
+
+    <!-- Features Section (placeholder) -->
+    <div>
+      <h2 class="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Key Features</h2>
+      <ul class="list-disc list-inside space-y-2 text-secondary-600 dark:text-secondary-400">
+        <li>Built with modern technologies</li>
+        <li>Responsive design across all devices</li>
+        <li>Optimized for performance</li>
+        <li>Clean, maintainable codebase</li>
+      </ul>
+    </div>
+
+    <!-- Technologies Deep Dive -->
+    {finalProject.technologiesList && finalProject.technologiesList.length > 0 && (
+      <div>
+        <h2 class="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Technical Implementation</h2>
+        <p class="text-secondary-600 dark:text-secondary-400 mb-4">
+          This project leverages a modern tech stack including:
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {finalProject.technologiesList.map((tech: string) => (
+            <div class="inline-flex items-center justify-center px-2 py-1 bg-primary-100 dark:bg-primary-900 rounded-md border border-secondary-200 dark:border-secondary-700">
+              <span class="text-sm font-medium text-primary-800 dark:text-primary-200">{tech}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Status Information -->
+    {finalProject.status && (
+      <div>
+        <h2 class="text-2xl font-bold text-secondary-900 dark:text-white mb-4">Project Status</h2>
+        <div class="p-4 bg-secondary-50 dark:bg-secondary-800 rounded-lg border border-secondary-200 dark:border-secondary-700">
+          <p class="text-secondary-600 dark:text-secondary-400">
+            This project is currently <strong class="text-secondary-900 dark:text-white">
+              {finalProject.status === 'active' ? 'active and maintained' :
+               finalProject.status === 'in-progress' ? 'in active development' :
+               finalProject.status === 'planned' ? 'in planning phase' :
+               finalProject.status === 'on-hold' ? 'on hold' :
+               finalProject.status === 'archived' ? 'archived' :
+               finalProject.status}
+            </strong>.
+            {finalProject.status === 'active' && ' I continue to add features and improvements regularly.'}
+            {finalProject.status === 'in-progress' && ' I am actively working on new features and improvements.'}
+            {finalProject.status === 'planned' && ' I am currently planning the implementation details.'}
+            {finalProject.status === 'on-hold' && ' Development is temporarily paused.'}
+            {finalProject.status === 'archived' && ' This project is no longer actively maintained.'}
+          </p>
+        </div>
+      </div>
+    )}
+  </div>
+</ProjectLayout>

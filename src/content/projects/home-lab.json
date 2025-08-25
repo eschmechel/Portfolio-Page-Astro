@@ -1,0 +1,10 @@
+{
+  "title": "Home Lab",
+  "category": "Infrastructure",
+  "description": "Personal homelab running Proxmox with automated Docker containers, secure remote access via Wireguard subnet routing, and comprehensive monitoring setup.",
+  "technologiesList": ["Proxmox", "Docker", "Bash", "Cloudflare", "Wireguard", "Linux"],
+  "projectPath": "/projects/home-lab",
+  "externalLink": "sample.txt",
+  "status": "active",
+  "isFeatured": true
+}

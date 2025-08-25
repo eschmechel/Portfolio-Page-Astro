@@ -1,0 +1,86 @@
+---
+// src/components/Timeline.astro
+import timelineEvents from "../data/timeLineData";
+---
+
+<div class="relative py-8">
+  <!-- Mobile: Vertical Timeline -->
+  <div class="md:hidden">
+    <!-- Timeline line -->
+    <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-primary-200 dark:bg-primary-700"></div>
+    
+    <!-- Timeline events -->
+    <div class="space-y-8">
+      {timelineEvents.map((event, index) => (
+        <div class="relative flex items-center">
+          <!-- Timeline dot -->
+          <div class={`absolute left-2 w-4 h-4 rounded-full border-4 border-blue-200 dark:border-secondary-900 z-10 ${
+            event.color === 'primary' ? 'bg-primary-500' :
+            event.color === 'secondary' ? 'bg-secondary-500' :
+            'bg-accent-500'
+          }`}></div>
+          
+          <!-- Event content -->
+          <div class="ml-10">
+            <div class="bg-white dark:bg-secondary-700 p-4 rounded-lg shadow-sm border border-secondary-200 dark:border-secondary-600">
+              <h4 class="font-semibold text-secondary-900 dark:text-white text-sm">
+                {event.title}
+              </h4>
+              <p class="text-secondary-600 dark:text-secondary-400 text-xs">
+                {event.description}
+              </p>
+              <time class="text-xs text-secondary-500 dark:text-secondary-500 font-medium">
+                {event.startDate && event.endDate ? `${event.startDate} - ${event.endDate}` : 
+                 event.startDate ? event.startDate : 
+                 event.endDate ? event.endDate : ''}
+              </time>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Desktop: Horizontal Timeline -->
+  <div class="hidden md:block py-8">
+    <!-- Timeline line spanning the content width -->
+    <div class="absolute top-1/2 transform -translate-y-1/2 h-0.5 bg-primary-200 dark:bg-primary-700" style="left: 96px; right: 96px;"></div>
+    
+    <!-- Timeline events alternating above and below -->
+    <div class="flex justify-start items-center relative h-96 gap-4">
+      {timelineEvents.map((event, index) => (
+        <div class="flex flex-col items-center relative w-40">
+          <!-- Event content -->
+          <div class={`absolute bg-white dark:bg-secondary-700 p-4 rounded-lg shadow-sm border border-secondary-200 dark:border-secondary-600 w-40 left-1/2 transform -translate-x-1/2 ${
+            index % 2 === 0 ? 'bottom-6' : 'top-6'
+          }`}>
+            <h4 class="font-semibold text-secondary-900 dark:text-white text-sm text-center">
+              {event.title}
+            </h4>
+            <p class="text-secondary-600 dark:text-secondary-400 text-xs text-center">
+              {event.description}
+            </p>
+            <time class="text-xs text-secondary-500 dark:text-secondary-500 font-medium block text-center mt-2">
+              {event.startDate && event.endDate ? `${event.startDate} - ${event.endDate}` : 
+               event.startDate ? event.startDate : 
+               event.endDate ? event.endDate : ''}
+            </time>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <!-- Timeline dots positioned on the line -->
+    <div class="absolute top-1/2 transform -translate-y-1/2 flex gap-4" style="left: 0;">
+      {timelineEvents.map((event, index) => (
+        <div class="flex justify-center w-40">
+          <div class={`w-4 h-4 rounded-full border-4 border-blue-200 dark:border-secondary-900 z-10 ${
+            event.color === 'primary' ? 'bg-primary-500' :
+            event.color === 'secondary' ? 'bg-secondary-500' :
+            'bg-accent-500'
+          }`}></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
