@@ -27,7 +27,9 @@ const projects = defineCollection({
     githubLink: z.string().optional(),
     externalLink: z.string().optional(),
     image: z.string().optional(),
-    status: z.enum(["active", "in-progress", "planned", "on-hold", "archived"]).optional(),
+    status: z
+      .enum(["active", "in-progress", "planned", "on-hold", "archived"])
+      .optional(),
     isFeatured: z.boolean().optional(),
     siteStatus: z.enum(["live", "unknown", "down"]).optional(), // For website projects
   }),

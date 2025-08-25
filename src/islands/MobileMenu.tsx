@@ -15,7 +15,6 @@ interface Props {
   currentPath: string;
 }
 
-
 export default function MobileMenu({ links, currentPath }: Props): JSX.Element {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -24,15 +23,15 @@ export default function MobileMenu({ links, currentPath }: Props): JSX.Element {
   useEffect(() => {
     if (isOpen) {
       // Disable scrolling
-      document.body.classList.add('overflow-hidden');
+      document.body.classList.add("overflow-hidden");
     } else {
       // Re-enable scrolling
-      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove("overflow-hidden");
     }
 
     // Cleanup function to ensure scrolling is re-enabled when component unmounts
     return () => {
-      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove("overflow-hidden");
     };
   }, [isOpen]);
 
@@ -163,7 +162,10 @@ export default function MobileMenu({ links, currentPath }: Props): JSX.Element {
           <div class="space-y-3">
             {/* Email link at top */}
             {socialAccounts
-              .filter((s) => s.platform.toLowerCase() === 'email' && s.hidden !== true)
+              .filter(
+                (s) =>
+                  s.platform.toLowerCase() === "email" && s.hidden !== true,
+              )
               .map((s) => (
                 <a
                   key={s.url}
@@ -174,27 +176,36 @@ export default function MobileMenu({ links, currentPath }: Props): JSX.Element {
                 >
                   <span
                     class="w-5 h-5"
-                    dangerouslySetInnerHTML={{ __html: getSocialIcon(s.platform) }}
+                    dangerouslySetInnerHTML={{
+                      __html: getSocialIcon(s.platform),
+                    }}
                   />
                   Contact Me
                 </a>
               ))}
             {/* Other socials */}
             {socialAccounts
-              .filter((s) => s.platform.toLowerCase() !== 'email' && s.hidden !== true)
+              .filter(
+                (s) =>
+                  s.platform.toLowerCase() !== "email" && s.hidden !== true,
+              )
               .map((s) => (
                 <a
                   key={s.url}
                   href={s.url}
                   class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200"
-                  target={s.url.startsWith('http') ? '_blank' : undefined}
-                  rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  target={s.url.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    s.url.startsWith("http") ? "noopener noreferrer" : undefined
+                  }
                   aria-label={`${s.platform} Profile`}
                   onClick={closeMenu}
                 >
                   <span
                     class="w-5 h-5"
-                    dangerouslySetInnerHTML={{ __html: getSocialIcon(s.platform) }}
+                    dangerouslySetInnerHTML={{
+                      __html: getSocialIcon(s.platform),
+                    }}
                   />
                   {s.platform}
                 </a>

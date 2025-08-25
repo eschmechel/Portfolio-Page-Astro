@@ -5,7 +5,7 @@ A modern, responsive portfolio website built with **Astro** and **Tailwind CSS**
 ## 🚀 Features
 
 - **Fast & Modern**: Built with Astro for optimal performance
-- **Responsive Design**: Works perfectly on all devices
+- **Responsive Design**: Works efficiently on all devices
 - **Dark/Light Mode**: Theme toggle with system preference detection
 - **Content Collections**: Markdown-powered blog with frontmatter
 - **SEO Optimized**: Meta tags, Open Graph, and auto-generated sitemap

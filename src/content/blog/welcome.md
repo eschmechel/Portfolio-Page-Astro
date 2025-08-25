@@ -27,7 +27,7 @@ I always desired to be a software Engineer since I was a little kid, wanting to 
 Some projects I'm excited to share more about:
 
 1. **Earn Cyber Certificates**: Working on my knowledge and skillset to pursue a <a href="https://www.comptia.org/en-us/certifications/security/" target="_blank" rel="noreferrer nofollow">Security+</a> certificate
-2. **Unreal Engine Networking**: Currently developing a Networking plugin utilizing Steam's <abbr title="Peer to Peer">P2P</abbr> system, with seamless player replication geared for <abbr title="First Person Shooters">FPS</abbr>. 
+2. **Unreal Engine Networking**: Currently developing a Networking plugin utilizing Steam's <abbr title="Peer to Peer">P2P</abbr> system, with seamless player replication geared for <abbr title="First Person Shooters">FPS</abbr>.
 3. **Consolidate subdomains into a monorepo**: Move separate subdomain repositories into a single monorepo per domain once each is stable to simplify management and reduce duplication.
 4. **Seeking Learning Opprutunities**: Attending more local events and workshops to gain insights from mentors and peers
 

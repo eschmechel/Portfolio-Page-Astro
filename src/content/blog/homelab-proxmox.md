@@ -29,7 +29,7 @@ My homelab runs on:
 - **HP EliteDesk 800 G4 SFF**
   - **CPU**: Intel i5-8600 @ 3.1GHz (6 cores, 6 threads)
   - **RAM**: 64GB DDR4-2133MHz
-  - **Storage**: 
+  - **Storage**:
     Utilizing a RAID-10 Setup
     - 2x 4TB HDD @ 7200RPM
     - 2x 4TB NVMe SSD
@@ -62,9 +62,9 @@ For secure remote access, I use:
    - Blocking CLI tools such as curl, wget
    - Blocking SQLi tools
    - Path protection rules
-3. **Tailscale VPN** 
+3. **Tailscale VPN**
    - Run in host mode as a subnet router; advertise routes, enforce ACLs to restrict SSH, and disable public SSH/port‑forwarding.
-4. **Subnetting + VLANs** 
+4. **Subnetting + VLANs**
    - The homelab is on a seperate VLAN to ensure exposure does not bleed over to the home network
 
 ## Lessons Learned

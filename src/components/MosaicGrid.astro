@@ -3,7 +3,6 @@
 import Timeline from './Timeline.astro';
 import { getCollection } from 'astro:content';
 import ProjectList from '../data/projectsData';
-import { fade } from 'astro:transitions';
 
 // Get project count dynamically
 let projectCount = 0;
@@ -131,7 +130,7 @@ try {
           </a>
         </div>
         <div class="space-y-4">
-          {featuredProjects.map((project, index) => (
+          {featuredProjects.map((project) => (
             <div>
               <h4 class="font-semibold text-secondary-900 dark:text-white mb-1">{project.title}</h4>
               <p class="text-sm text-secondary-600 dark:text-secondary-400">

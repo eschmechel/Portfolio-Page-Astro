@@ -2,7 +2,15 @@
   "title": "Langara French Club Website",
   "category": "Website",
   "description": "Maintaining the Langara French Club website as well as managing its communication and outreach.",
-  "technologiesList": ["EmailJS", "React", "Swiper", "Vercel", "Typescript", "NextJS", "TailwindCSS"],
+  "technologiesList": [
+    "EmailJS",
+    "React",
+    "Swiper",
+    "Vercel",
+    "Typescript",
+    "NextJS",
+    "TailwindCSS"
+  ],
   "projectPath": "/projects/langara-french-club-website",
   "externalLink": "https://www.langarafr.com/",
   "githubLink": "https://github.com/LMSAIH/langarafrenchclub",

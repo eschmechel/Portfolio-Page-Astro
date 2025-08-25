@@ -15,10 +15,9 @@ export const personalData = {
     message: "Available to work",
   },
 
-
   skills: {
-    primary: [ "Bash", "C++", "C#", "Java", "Python", "Typescript"],
-    tools: [ "Cloudflare","Git", "Godot", "Linux", "Proxmox"],
+    primary: ["Bash", "C++", "C#", "Java", "Python", "Typescript"],
+    tools: ["Cloudflare", "Git", "Godot", "Linux", "Proxmox"],
   },
 
   meta: {
