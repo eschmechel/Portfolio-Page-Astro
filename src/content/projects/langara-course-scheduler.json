@@ -1,0 +1,11 @@
+{
+  "title": "Langara Course Scheduler",
+  "category": "Website",
+  "description": "A web application to help students schedule their courses effectively.",
+  "technologiesList": ["React", "Node.js", "Express", "MongoDB"],
+  "projectPath": "/projects/langara-course-scheduler",
+  "externalLink": "https://www.langaracoursescheduler.com/",
+  "githubLink": "https://github.com/LMSAIH/LangaraScraper",
+  "status": "in-progress",
+  "isFeatured": false
+}

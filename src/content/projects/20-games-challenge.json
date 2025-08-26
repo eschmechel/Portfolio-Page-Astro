@@ -1,0 +1,18 @@
+{
+  "title": "20 Games Challenge",
+  "category": "Website",
+  "description": "20 Games Challenge is a personal project where I aim to create 20 games in 1 year, showcasing my skills in game development and design.",
+  "technologiesList": [
+    "Godot Engine",
+    "Unity",
+    "Unreal Engine",
+    "WebAssembly",
+    "C++",
+    "C#"
+  ],
+  "projectPath": "/projects/20-games-challenge",
+  "externalLink": "https://games.eschmechel.dev/",
+  "githubLink": "https://github.com/eschmechel/games-site",
+  "status": "in-progress",
+  "isFeatured": true
+}

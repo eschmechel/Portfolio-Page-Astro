@@ -1,0 +1,11 @@
+{
+  "title": "Student Software Association",
+  "category": "Outreach",
+  "description": "Building a community for inter-uni collaboration and support.",
+  "technologiesList": ["Discord", "Cloudflare"],
+  "projectPath": "/projects/student-software-association",
+  "externalLink": "https://sample2.example.com",
+  "githubLink": "https://github.com/sample2",
+  "status": "on-hold",
+  "isFeatured": false
+}

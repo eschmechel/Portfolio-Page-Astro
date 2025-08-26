@@ -1,0 +1,253 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import type { Project } from '../../data/projectsData';
+
+export interface Props { projects: Project[]; }
+const { projects } = Astro.props;
+const uniqueCategories = [...new Set(projects.map(p => p.category).filter(Boolean))].sort();
+
+// Filter button data
+const statusFilters = [
+  { filter: 'all', label: 'All', active: true },
+  { filter: 'active', label: 'Active' },
+  { filter: 'in-progress', label: 'In Progress' },
+  { filter: 'planned', label: 'Planned' },
+  { filter: 'on-hold', label: 'On Hold' },
+  { filter: 'archived', label: 'Archived' }
+];
+
+const typeFilters = [
+  { filter: 'all', label: 'All Types', active: true },
+  { filter: 'has-external', label: 'Has External Link' },
+  { filter: 'has-github', label: 'Has GitHub' },
+  { filter: 'featured', label: 'Featured' }
+];
+---
+
+<div class="project-list-container">
+  <!-- Search Bar and Filter -->
+  <div class="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+    <!-- Search Bar -->
+    <div class="relative flex-1 max-w-md">
+      <input type="text" id="project-search" placeholder="Search projects by name..." class="w-full px-4 py-2 pl-10 pr-4 text-sm border border-secondary-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-800 text-secondary-900 dark:text-white placeholder-secondary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+      <svg class="absolute left-3 top-2.5 w-4 h-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    </div>
+    <!-- Filter Type Selector -->
+    <div class="flex items-center gap-2 flex-shrink-0">
+      <label for="filter-type" class="text-sm font-medium text-secondary-700 dark:text-secondary-300">Filter by:</label>
+      <select id="filter-type" class="px-3 py-2 text-sm border border-secondary-300 dark:border-secondary-600 rounded-lg bg-white dark:bg-secondary-800 text-secondary-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
+        <option value="status">Status</option>
+        <option value="category">Category</option>
+        <option value="type">Type</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Filter Tags -->
+  <div class="mb-6">
+    <!-- Status Filters -->
+    <div id="status-filters" class="filter-group flex flex-wrap gap-2">
+      {statusFilters.map(({ filter, label, active }) => (
+        <button class={`filter-tag px-3 py-1.5 text-sm font-medium rounded-full border transition-colors ${active ? 'active' : ''}`} data-filter={filter} data-type="status">{label}</button>
+      ))}
+    </div>
+
+    <!-- Category Filters -->
+    <div id="category-filters" class="filter-group hidden flex-wrap gap-2">
+      <button class="filter-tag active px-3 py-1.5 text-sm font-medium rounded-full border transition-colors" data-filter="all" data-type="category">All Categories</button>
+      {uniqueCategories.map(category => (
+        <button class="filter-tag px-3 py-1.5 text-sm font-medium rounded-full border transition-colors" data-filter={category.toLowerCase()} data-type="category">{category}</button>
+      ))}
+    </div>
+
+    <!-- Type Filters -->
+    <div id="type-filters" class="filter-group hidden flex-wrap gap-2">
+      {typeFilters.map(({ filter, label, active }) => (
+        <button class={`filter-tag px-3 py-1.5 text-sm font-medium rounded-full border transition-colors ${active ? 'active' : ''}`} data-filter={filter} data-type="type">{label}</button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Project List Container with Scroll -->
+  <div class="max-h-[40rem] overflow-y-auto border border-secondary-200 dark:border-secondary-700 rounded-lg bg-secondary-50 dark:bg-secondary-800/50 p-4">
+    <!-- Project List -->
+    <div class="space-y-3" id="project-list">
+      {projects.map(project => <ProjectCard {...project} variant="compact" showImage={false} />)}
+    </div>
+
+    <!-- No Results Message -->
+    <div id="no-results" class="hidden text-center py-8 w-full px-4">
+      <div class="flex flex-col items-center justify-center max-w-sm mx-auto">
+        <svg class="w-12 h-12 text-secondary-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <p class="text-secondary-600 dark:text-secondary-400">No projects found matching your criteria.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .filter-tag {
+    @apply bg-secondary-100 dark:bg-secondary-700 text-secondary-700 dark:text-secondary-300 border-secondary-200 dark:border-secondary-600;
+  }
+  
+  .filter-tag:hover {
+    @apply bg-secondary-200 dark:bg-secondary-600 border-secondary-300 dark:border-secondary-500;
+  }
+  
+  .filter-tag.active {
+    @apply bg-primary-600 text-white border-primary-600;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('project-search') as HTMLInputElement;
+    const filterTypeSelect = document.getElementById('filter-type') as HTMLSelectElement;
+    const projectItems = document.querySelectorAll('.project-item');
+    const noResults = document.getElementById('no-results') as HTMLElement;
+    const filterGroups = document.querySelectorAll('.filter-group');
+    
+    let currentFilterType = 'status', currentFilter = 'all', activeTypeFilters = new Set(['all']);
+    
+    function showFilterGroup(type: string) {
+      filterGroups.forEach(group => {
+        const htmlGroup = group as HTMLElement;
+        htmlGroup.classList.toggle('hidden', group.id !== `${type}-filters`);
+        htmlGroup.classList.toggle('flex', group.id === `${type}-filters`);
+      });
+      
+      document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
+      const activeGroup = document.getElementById(`${type}-filters`);
+      if (activeGroup) {
+        const firstTag = activeGroup.querySelector('.filter-tag') as HTMLElement;
+        if (firstTag) {
+          firstTag.classList.add('active');
+          if (type === 'type') {
+            activeTypeFilters.clear(); activeTypeFilters.add('all'); currentFilter = 'all';
+          } else currentFilter = firstTag.getAttribute('data-filter') || 'all';
+        }
+      }
+    }
+    
+    function sortProjects() {
+      const projectContainer = document.getElementById('project-list');
+      if (!projectContainer) return;
+      
+      const visibleItems = Array.from(projectItems).filter(item => (item as HTMLElement).style.display !== 'none');
+      const statusOrder = { 'active': 5, 'in-progress': 4, 'on-hold': 3, 'planned': 2, 'archived': 1 };
+      
+      visibleItems.sort((a, b) => {
+        const itemA = a as HTMLElement, itemB = b as HTMLElement;
+        
+        if (currentFilterType === 'status') {
+          const orderA = statusOrder[(itemA.getAttribute('data-status') || '') as keyof typeof statusOrder] || 0;
+          const orderB = statusOrder[(itemB.getAttribute('data-status') || '') as keyof typeof statusOrder] || 0;
+          if (orderA !== orderB) return orderB - orderA;
+        } else if (currentFilterType === 'category') {
+          const categoryA = itemA.getAttribute('data-category') || '', categoryB = itemB.getAttribute('data-category') || '';
+          if (categoryA !== categoryB) return categoryA.localeCompare(categoryB);
+        } else if (currentFilterType === 'type') {
+          const countA = [itemA.getAttribute('data-has-external') === 'true', itemA.getAttribute('data-has-github') === 'true', itemA.getAttribute('data-featured') === 'true'].filter(Boolean).length;
+          const countB = [itemB.getAttribute('data-has-external') === 'true', itemB.getAttribute('data-has-github') === 'true', itemB.getAttribute('data-featured') === 'true'].filter(Boolean).length;
+          if (countA !== countB) return countB - countA;
+          
+          const orderA = statusOrder[(itemA.getAttribute('data-status') || '') as keyof typeof statusOrder] || 0;
+          const orderB = statusOrder[(itemB.getAttribute('data-status') || '') as keyof typeof statusOrder] || 0;
+          if (orderA !== orderB) return orderB - orderA;
+        }
+        
+        return (itemA.getAttribute('data-title') || '').localeCompare(itemB.getAttribute('data-title') || '');
+      });
+      
+      visibleItems.forEach(item => projectContainer.appendChild(item));
+    }
+    
+    function filterProjects() {
+      const searchTerm = searchInput?.value.toLowerCase() || '';
+      let visibleCount = 0;
+      
+      projectItems.forEach(item => {
+        const htmlItem = item as HTMLElement;
+        const title = htmlItem.getAttribute('data-title') || '';
+        const description = htmlItem.getAttribute('data-description') || '';
+        const technologies = htmlItem.getAttribute('data-technologies') || '';
+        
+        const matchesSearch = !searchTerm || title.includes(searchTerm) || description.includes(searchTerm) || technologies.includes(searchTerm);
+        let matchesFilter = currentFilter === 'all' && currentFilterType !== 'type';
+        
+        if (!matchesFilter) {
+          if (currentFilterType === 'status') {
+            matchesFilter = (htmlItem.getAttribute('data-status') || '') === currentFilter;
+          } else if (currentFilterType === 'category') {
+            matchesFilter = (htmlItem.getAttribute('data-category') || '') === currentFilter;
+          } else if (currentFilterType === 'type') {
+            matchesFilter = activeTypeFilters.has('all') || Array.from(activeTypeFilters).every(filter => {
+              switch (filter) {
+                case 'has-external': return htmlItem.getAttribute('data-has-external') === 'true';
+                case 'has-github': return htmlItem.getAttribute('data-has-github') === 'true';
+                case 'featured': return htmlItem.getAttribute('data-featured') === 'true';
+                default: return false;
+              }
+            });
+          }
+        }
+        
+        htmlItem.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
+        if (matchesSearch && matchesFilter) visibleCount++;
+      });
+      
+      if (noResults) noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      sortProjects();
+    }
+    
+    // Event listeners
+    filterTypeSelect?.addEventListener('change', function() {
+      currentFilterType = this.value;
+      showFilterGroup(currentFilterType);
+      filterProjects();
+    });
+    
+    searchInput?.addEventListener('input', filterProjects);
+    
+    document.addEventListener('click', function(e) {
+      const target = e.target as HTMLElement;
+      if (!target?.classList.contains('filter-tag') || target.getAttribute('data-type') !== currentFilterType) return;
+      
+      const filterValue = target.getAttribute('data-filter') || 'all';
+      
+      if (currentFilterType === 'type') {
+        if (filterValue === 'all') {
+          activeTypeFilters.clear();
+          activeTypeFilters.add('all');
+          document.querySelectorAll('#type-filters .filter-tag').forEach(t => t.classList.remove('active'));
+          target.classList.add('active');
+        } else {
+          if (activeTypeFilters.has(filterValue)) {
+            activeTypeFilters.delete(filterValue);
+            target.classList.remove('active');
+            if (activeTypeFilters.size === 0) {
+              activeTypeFilters.add('all');
+              document.querySelector('[data-filter="all"][data-type="type"]')?.classList.add('active');
+            }
+          } else {
+            activeTypeFilters.delete('all');
+            activeTypeFilters.add(filterValue);
+            target.classList.add('active');
+            document.querySelector('[data-filter="all"][data-type="type"]')?.classList.remove('active');
+          }
+        }
+      } else {
+        document.querySelectorAll(`#${currentFilterType}-filters .filter-tag`).forEach(t => t.classList.remove('active'));
+        target.classList.add('active');
+        currentFilter = filterValue;
+      }
+      
+      filterProjects();
+    });
+    
+    showFilterGroup(currentFilterType);
+    filterProjects();
+  });
+</script>

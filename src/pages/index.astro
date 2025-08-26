@@ -1,16 +1,16 @@
 ---
-
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import TechStack from '../islands/TechStack.tsx';
+import MosaicGrid from '../components/MosaicGrid.astro';
+import { personalData } from '../data/personalData.ts';
+const pageTitle = `${personalData.meta.siteName} | ${personalData.title}`;
+const pageDescription = personalData.meta.description;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <Hero />
+  <TechStack client:load />
+  <MosaicGrid />
+</BaseLayout>

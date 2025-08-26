@@ -1,0 +1,32 @@
+---
+// Social links rendered from src/data/socialData.ts
+export interface Props {
+  class?: string;
+  style?: string;
+  showEmail?: boolean
+}
+
+import {Socials as socialAccounts} from "../../data/socialData";
+import { getSocialIcon } from "../../utils/socialIcons";
+
+const { class: className = "", style = "", showEmail = true } = Astro.props as Props;
+
+---
+<div class={`flex gap-6 justify-center ${className}`} style={style}>
+    {socialAccounts
+      .filter((s) => 
+        s.hidden !== true && 
+        (showEmail || (s.platform.toLowerCase() !== "email" && getSocialIcon(s.platform)))
+      )
+      .map((s) => (
+    <a
+      href={s.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="p-3 bg-white dark:bg-secondary-800 rounded-full shadow-md hover:shadow-lg transform hover:scale-110 transition-all duration-200 text-secondary-600 dark:text-secondary-400 hover:text-secondary-800 dark:hover:text-secondary-200"
+      aria-label={`${s.platform} Profile`}
+    >
+  <span class="w-6 h-6" set:html={getSocialIcon(s.platform)} />
+    </a>
+  ))}
+</div>

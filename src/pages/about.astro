@@ -1,0 +1,208 @@
+---
+// src/pages/about.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { personalData } from '../data/personalData';
+import Socials from '../data/socialData';
+import { getSocialIcon } from '../utils/socialIcons';
+
+const pageTitle = `About | ${personalData.meta.siteName}`;
+const pageDescription = `Learn more about ${personalData.name}, ${personalData.title} with 4 years of experience.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-6">
+        About Me
+      </h1>
+      <p class="text-xl text-secondary-600 dark:text-secondary-400 max-w-2xl mx-auto">
+        Software Engineer, passionate about creating engaging experiences through code.
+      </p>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="grid lg:grid-cols-3 gap-12">
+      <!-- Bio Section -->
+      <div class="lg:col-span-2 space-y-8">
+        <!--My Journey -->
+        <section>
+          <h2 class="text-2xl font-semibold text-secondary-900 dark:text-white mb-4">
+            My Journey
+          </h2>
+          <div class="prose prose-lg prose-secondary dark:prose-invert max-w-none">
+            <p>
+              I'm Elliott Schmechel, a 19-year-old software engineer based in Vancouver, BC. 
+              I started coding at 13 making Scratch games, ever since I've had the drive to create.
+            </p>
+            <p>
+              Currently, I'm studying Computer Science at Langara College. 
+              Between student life, and juggling customer-experience part-time jobs, I try to find time for personal projects and skill development.
+            </p>
+            <p>
+              I specialize in game development using Godot and Unreal Engine, with strong skills in C++ and C#. 
+              I'm also passionate about infrastructure and DevSecOps, maintaining a personal homelab exploring cloud technologies and self-hosting.
+            </p>
+          </div>
+        </section>
+        
+        <!--What I do -->
+        <section>
+          <h2 class="text-2xl font-semibold text-secondary-900 dark:text-white mb-4">
+            What I Do
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-white dark:bg-secondary-800 p-6 rounded-xl border border-secondary-200 dark:border-secondary-700">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-primary-100 dark:bg-primary-900 rounded-lg">
+                  <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10v18a2 2 0 01-2 2H5a2 2 0 01-2-2V4a2 2 0 012-2h14a2 2 0 012 2z"/>
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-secondary-900 dark:text-white">Games</h3>
+              </div>
+              <p class="text-secondary-600 dark:text-secondary-400 text-sm">
+                Creating engaging games with Godot and Unreal Engine, focusing on gameplay mechanics and n1etworking.
+              </p>
+            </div>
+            
+            <div class="bg-white dark:bg-secondary-800 p-6 rounded-xl border border-secondary-200 dark:border-secondary-700">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-accent-100 dark:bg-accent-900 rounded-lg">
+                  <svg class="w-5 h-5 text-accent-600 dark:text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-secondary-900 dark:text-white">DevOps</h3>
+              </div>
+              <p class="text-secondary-600 dark:text-secondary-400 text-sm">
+                Building and maintaining homelab environments with container orchestration and cloud deployments.
+              </p>
+            </div>
+            
+            <div class="bg-white dark:bg-secondary-800 p-6 rounded-xl border border-secondary-200 dark:border-secondary-700">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
+                  <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-secondary-900 dark:text-white">AI & ML</h3>
+              </div>
+              <p class="text-secondary-600 dark:text-secondary-400 text-sm">
+                Working as an AI Red Teamer, testing and improving AI systems with quality assurance experience.
+              </p>
+            </div>
+            
+            <div class="bg-white dark:bg-secondary-800 p-6 rounded-xl border border-secondary-200 dark:border-secondary-700">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                  <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-secondary-900 dark:text-white">Web Dev</h3>
+              </div>
+              <p class="text-secondary-600 dark:text-secondary-400 text-sm">
+                Building modern web applications using frameworks like Astro, with a focus on performance and accessibility.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+      
+      <!-- Sidebar -->
+      <div class="space-y-8">
+        <!-- Skills -->
+        <section class="bg-white dark:bg-secondary-800 p-6 rounded-xl border border-secondary-200 dark:border-secondary-700">
+          <h3 class="text-lg font-semibold text-secondary-900 dark:text-white mb-4">
+            Core Skills
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-sm font-medium text-secondary-700 dark:text-secondary-300 mb-2">Programming</h4>
+              <div class="flex flex-wrap gap-2">
+                {personalData.skills.primary.map(skill => (
+                  <span class="px-2 py-1 text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 class="text-sm font-medium text-secondary-700 dark:text-secondary-300 mb-2">Tools & Platforms</h4>
+              <div class="flex flex-wrap gap-2">
+                {personalData.skills.tools.map(tool => (
+                  <span class="px-2 py-1 text-xs font-medium bg-secondary-100 dark:bg-secondary-700 text-secondary-800 dark:text-secondary-200 rounded">
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- Contact -->
+        <section class="bg-white dark:bg-secondary-800 p-6 rounded-xl border border-secondary-200 dark:border-secondary-700">
+          <h3 class="text-lg font-semibold text-secondary-900 dark:text-white mb-4">
+            Get In Touch
+          </h3>
+          <div class="space-y-3">
+            <a 
+              href={Socials.find(s => s.platform.toLowerCase() === 'email')?.url}
+              class="flex items-center gap-3 p-3 rounded-lg bg-secondary-50 dark:bg-secondary-700 hover:bg-secondary-100 dark:hover:bg-secondary-600 transition-colors"
+            >
+              <span class="w-5 h-5 text-secondary-600 dark:text-secondary-400" set:html={getSocialIcon('Email')} />
+              <span class="text-sm font-medium text-secondary-900 dark:text-white">Email</span>
+            </a>
+            
+            <a 
+              href={Socials.find(s => s.platform.toLowerCase() === 'linkedin')?.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-3 p-3 rounded-lg bg-secondary-50 dark:bg-secondary-700 hover:bg-secondary-100 dark:hover:bg-secondary-600 transition-colors"
+            >
+              <span class="w-5 h-5 text-secondary-600 dark:text-secondary-400" set:html={getSocialIcon('LinkedIn')} />
+              <span class="text-sm font-medium text-secondary-900 dark:text-white">LinkedIn</span>
+            </a>
+            
+            <a 
+              href={Socials.find(s => s.platform.toLowerCase() === 'github')?.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-3 p-3 rounded-lg bg-secondary-50 dark:bg-secondary-700 hover:bg-secondary-100 dark:hover:bg-secondary-600 transition-colors"
+            >
+              <span class="w-5 h-5 text-secondary-600 dark:text-secondary-400" set:html={getSocialIcon('GitHub')} />
+              <span class="text-sm font-medium text-secondary-900 dark:text-white">GitHub</span>
+            </a>
+          </div>
+        </section>
+        
+        <!-- Fun Facts -->
+        <section class="bg-white dark:bg-secondary-800 p-6 rounded-xl border border-secondary-200 dark:border-secondary-700">
+          <h3 class="text-lg font-semibold text-secondary-900 dark:text-white mb-4">
+            Fun Facts
+          </h3>
+          <ul class="space-y-2 text-sm text-secondary-600 dark:text-secondary-400">
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+              Started programming at age 13
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+              Love 3D printing and DIY projects
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+              Enjoy exploring new technologies
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+              Always up for a challenge
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
