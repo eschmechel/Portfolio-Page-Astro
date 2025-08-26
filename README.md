@@ -106,6 +106,5 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`         | Preview your build locally, before deploying
 
 ## TODO LIST
-Replace `public/images/og-image.png`
-^Default image for sharing on social media websites
+might need to replace og-image
 `src/islands/MobileMenu.tsx` the js for scroll-locking when the menu is open could potentionally be replaced with pure react using react-aria/UsePreventScroll package

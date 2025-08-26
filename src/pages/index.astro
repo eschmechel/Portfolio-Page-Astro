@@ -5,11 +5,10 @@ import Hero from '../components/Hero.astro';
 import TechStack from '../islands/TechStack.tsx';
 import MosaicGrid from '../components/MosaicGrid.astro';
 import { personalData } from '../data/personalData.ts';
-const pageTitle = `${personalData.meta.siteName} | ${personalData.title}`;
 const pageDescription = personalData.meta.description;
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout title={`Home | Elliott Schmechel`} description={pageDescription}>
   <Hero />
   <TechStack client:load />
   <MosaicGrid />
