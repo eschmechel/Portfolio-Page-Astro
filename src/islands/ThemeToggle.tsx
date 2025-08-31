@@ -10,16 +10,21 @@ export default function ThemeToggle(): JSX.Element {
 
   useEffect(() => {
     setMounted(true);
-
-    // Get initial theme
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const initialTheme: Theme = savedTheme || (prefersDark ? "dark" : "light");
-
+    // Derive current theme from <html> class set by early inline script to avoid repaint
+    const root = document.documentElement;
+    const hasDark = root.classList.contains('dark');
+    const savedTheme = localStorage.getItem('theme') as Theme | null;
+    let initialTheme: Theme;
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      initialTheme = savedTheme;
+    } else {
+      initialTheme = hasDark ? 'dark' : 'light';
+    }
     setTheme(initialTheme);
-    updateTheme(initialTheme);
+    // Only write if localStorage missing
+    if (!savedTheme) {
+      localStorage.setItem('theme', initialTheme);
+    }
   }, []);
 
   const updateTheme = (newTheme: Theme): void => {
